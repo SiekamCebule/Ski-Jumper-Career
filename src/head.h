@@ -21,10 +21,13 @@
 using namespace std;
 HANDLE hcon = GetStdHandle(STD_OUTPUT_HANDLE);
 
-#define APP_VERSION "0.0.1";
-#define DEFAULT_SAVEFILENAME "save.sav";
-#define cls system("cls");
-#define hillsfile hlf;
+#define APP_VERSION "0.0.1"
+#define DEFAULT_SAVEFILENAME "save.sav"
+#define cls system("cls")
+#define hillsfile hlf
+#define jumpersfile jpf
+#define trainingconfigfile tcf
+#define nationsfile ntf
 
 class Jumper
 {
@@ -34,15 +37,16 @@ public:
     int height, age;
     string nationality;
     int takeoffPowerS, takeoffTechniqueS;
-    int skisPositionS, flightStyleS, transitionSpeedS;
+    int skisPositionS, flightStyle;
     int takeoffPower, takeoffTechnique;
-    int skisPosition, flightStyle, transitionSpeed;
+    int skisPosition, transitionSpeed;
     int flightTechnique, flightTechniqueS;
-    int landSkill, landStyleS;
+    int landSkillS, landStyleS;
     int expernice, condition, readyToJump, form, happiness, injuryResistance;
+    int gate;
     //skok
     double distance, toBeat;
-    double judges[5], minJudge, maxJudge, wind, windBonus, judgeRating, judgesPoints, judgesAll;
+    double judges[5], minJudge, maxJudge, wind, windB, windBonus, judgeRating, judgesPoints, judgesAll;
     double points, compensationGate, compensationWind;
     bool dsq;
     void jump();
@@ -60,7 +64,13 @@ public:
     double startDist, takeoffDist, flightDist, minWindChange, maxWindChange;
     int optimalSkisPosition;
     double skisPositionEffect;
-    double takeoffPowerMeters, takeoffTechniqueMeters, flightTechniqueMeters;
+    double  takeoffTechniqueMeters, flightTechniqueMeters;
+    int optimalTakeoffPower;
+    double takeoffPowerImportance;
+
+    //config
+
+    double windFaulty;
 };
 class Time
 {
@@ -78,13 +88,19 @@ public:
     void load(string filename);
 };
 Hill hill;
+Jumper trainingJumper;
 Save save;
-fstream hillsfile;
+fstream hillsfile, jumpersfile, trainingconfigfile, nationsfile;
 int randomInt(int, int);
 double randomDouble(double, double);
 void colorText(unsigned short color, string text);
 double percent(double prc, double num);
 void loadHills();
+void loadJumpers(bool ifForm);
+void loadTrainingConfig();
 void selectTrainingHill();
+void selectTrainingJumper();
+void showHillInfo(Hill hl);
 
 vector<Hill> hills;
+vector <Jumper> jumpersList;

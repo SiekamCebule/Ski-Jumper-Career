@@ -4,14 +4,16 @@ int main()
 {
     Jumper testjumper;
     loadHills();
+    loadJumpers(true);
 
-    cout << "Skoczek (MW, TW, F, TL): ";
-    cin >> testjumper.takeoffPowerS >> testjumper.takeoffTechniqueS >> testjumper.form >> testjumper.flightTechniqueS;
+    //cout << "Skoczek (MW, TW, F, TL): ";
+    //cin >> testjumper.takeoffPowerS >> testjumper.takeoffTechniqueS >> testjumper.form >> testjumper.flightTechniqueS;
     char choice;
     string choice1;
     cout << "Ski Jumper Perspective " << APP_VERSION;
     cout << "\nOpcje: \n1. Nowy zapis gry\n2. Wczytaj istniejacy zapis gry\n3. Wyswietl wczytane zasoby\n4. Pojedynczy skok\n";
-    cin >> choice;
+    choice = getch();
+    cls;
     switch (choice)
     {
     case '1':
@@ -21,14 +23,20 @@ int main()
     }
     case '4':
     {
+        cls;
         selectTrainingHill();
+        cls;
+        showHillInfo(hill);
+        getch();
+        cls;
+        selectTrainingJumper();
         for (;;)
         {
-            testjumper.jump();
+            trainingJumper.jump();
             getch();
         }
     }
     }
 
-    system("pause");
+    getch();
 }

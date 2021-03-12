@@ -6,20 +6,67 @@ void Save::initSave(string filename)
 
 void Jumper::jump()
 {
+
+    if (hill.kpoint <= 25)
+        hill.metersPoints = 4.8;
+    else if (hill.kpoint <= 30)
+        hill.metersPoints = 4.4;
+    else if (hill.kpoint <= 34)
+        hill.metersPoints = 4;
+    else if (hill.kpoint <= 39)
+        hill.metersPoints = 3.6;
+    else if (hill.kpoint <= 49)
+        hill.metersPoints = 3.2;
+    else if (hill.kpoint <= 59)
+        hill.metersPoints = 2.8;
+    else if (hill.kpoint <= 69)
+        hill.metersPoints = 2.4;
+    else if (hill.kpoint <= 79)
+        hill.metersPoints = 2.2;
+    else if (hill.kpoint <= 99)
+        hill.metersPoints = 2.0;
+    else if (hill.kpoint <= 169)
+        hill.metersPoints = 1.8;
+    else if (hill.kpoint >= 170)
+    {
+        hill.metersPoints = 1.2;
+        hill.pointsForK = 120;
+    }
+
+    cout << "Wiatr: ";
+    cin >> wind;
+    cls;
     int rd;
     if (takeoffPowerS > 120)
         takeoffPowerS = 120;
     if (takeoffTechniqueS > 120)
         takeoffTechniqueS = 120;
-    if (flightStyleS > 3)
+    if (flightStyle > 3)
         flightStyle = 1; //Styl V
     if (skisPositionS > 14)
         skisPositionS = 10;
-    if (transitionSpeedS > 120)
-        transitionSpeed = 120;
-    distance = 0;
     takeoffPower = (takeoffPowerS);
-    rd = randomInt(1, 8480);
+    takeoffTechnique = (takeoffTechniqueS * 0.987) + (form * 1.05);
+    //cout << "takeoffTechnique " << takeoffTechnique << endl;
+    //cout << "form " << form << endl;
+    flightTechnique = (flightTechniqueS * 0.887) + (form * 1.15);
+
+    if (hill.gateMeters == (-1))
+    {
+        hill.gateMeters = (hill.gatePoints / hill.metersPoints);
+    }
+    if (hill.windMetersBack == (-1))
+    {
+        hill.windMetersBack = (hill.windMetersBack / hill.metersPoints);
+    }
+    if (hill.windMetersFront == (-1))
+    {
+        hill.windMetersFront = (hill.windMetersFront / hill.metersPoints);
+    }
+
+    windB = wind + randomDouble(-hill.windFaulty, hill.windFaulty);
+
+    /*rd = randomInt(1, 8480);
     if (rd <= 1)
         takeoffPower += 20;
     else if (rd <= 3)
@@ -101,7 +148,6 @@ void Jumper::jump()
     else if (rd <= 10719)
         takeoffPower += -19;
 
-    takeoffTechnique = (takeoffTechniqueS * 0.987) + (form * 1.05);
     rd = randomInt(1, 10838);
 
     if (rd <= 1)
@@ -187,7 +233,7 @@ void Jumper::jump()
     else if (rd <= 10838)
         takeoffTechnique += 0;
 
-    /*if (rd <= 1)
+    if (rd <= 1)
         takeoffTechnique += 20;
     else if (rd <= 3)
         takeoffTechnique += 19;
@@ -268,97 +314,61 @@ void Jumper::jump()
     else if (rd <= 10719)
         takeoffTechnique += -19;*/
 
-    flightTechnique = (flightTechniqueS * 0.887) + (form * 1.15);
-    rd = randomInt(1, 10838);
-        if (rd <= 1)
-        flightTechnique += 40;
-    else if (rd <= 3)
-        flightTechnique += 39;
-    else if (rd <= 10)
-        flightTechnique += 38;
-    else if (rd <= 20)
-        flightTechnique += 37;
-    else if (rd <= 25)
-        flightTechnique += 36;
-    else if (rd <= 46)
-        flightTechnique += 35;
-    else if (rd <= 71)
-        flightTechnique += 34;
-    else if (rd <= 103)
-        flightTechnique += 33;
-    else if (rd <= 142)
-        flightTechnique += 32;
-    else if (rd <= 190)
-        flightTechnique += 31;
-    else if (rd <= 247)
-        flightTechnique += 30;
-    else if (rd <= 295)
-        flightTechnique += 29;
-    else if (rd <= 351)
-        flightTechnique += 28;
-    else if (rd <= 412)
-        flightTechnique += 27;
-    else if (rd <= 480)
-        flightTechnique += 26;
-    else if (rd <= 555)
-        flightTechnique += 25;
-    else if (rd <= 640)
-        flightTechnique += 24;
-    else if (rd <= 737)
-        flightTechnique += 23;
-    else if (rd <= 847)
-        flightTechnique += 22;
-    else if (rd <= 980)
-        flightTechnique += 21;
-    else if (rd <= 1116)
-        flightTechnique += 20;
-    else if (rd <= 1285)
-        flightTechnique += 19;
-    else if (rd <= 1470)
-        flightTechnique += 18;
-    else if (rd <= 1680)
-        flightTechnique += 17;
-    else if (rd <= 1915)
-        flightTechnique += 16;
-    else if (rd <= 2180)
-        flightTechnique += 15;
-    else if (rd <= 2476)
-        flightTechnique += 14;
-    else if (rd <= 2786)
-        flightTechnique += 13;
-    else if (rd <= 3126)
-        flightTechnique += 12;
-    else if (rd <= 3486)
-        flightTechnique += 11;
-    else if (rd <= 3871)
-        flightTechnique += 10;
-    else if (rd <= 4273)
-        flightTechnique += 9;
-    else if (rd <= 4753)
-        flightTechnique += 8;
-    else if (rd <= 5273)
-        flightTechnique += 7;
-    else if (rd <= 5833)
-        flightTechnique += 6;
-    else if (rd <= 6435)
-        flightTechnique += 5;
-    else if (rd <= 7100)
-        flightTechnique += 4;
-    else if (rd <= 7860)
-        flightTechnique += 3;
-    else if (rd <= 8740)
-        flightTechnique += 2;
-    else if (rd <= 9738)
-        flightTechnique += 1;
-    else if (rd <= 10838)
-        flightTechnique += 0;
+    /*int test1 = 30;
+    uint64_t rd1[60];
+    rd1[0] = 1;
+    for (int i = 1; i <= 32; i++)
+    {
+        rd1[i] = rd1[i - 1] * 3;
+    }
 
+    uint64_t rd2[30];
+    rd2[0] = 1;
+    for (int i = 1; i <= 31; i++)
+    {
+        rd2[i] = (rd1[i + 30] + (rd1[rd1[32 - i]] - (rd1[rd1[31 - i]])));
+    }
+
+    for (int i = 32; i <= 61; i++)
+    {
+        rd1[i] = rd2[i - 32];
+    }
+
+    for (auto rr : rd1)
+    {
+        cout << test1 << ". " << rr << endl;
+        test1--;
+    }
+
+    rd = randomInt(1, rd1[59]);*/
+
+    //cout << "distance " << distance << endl;
+    double diff;
+    diff = (takeoffPower - hill.optimalTakeoffPower);
+    //cout << "optymalna moc wybicia:" << hill.optimalTakeoffPower << endl;
+    if (diff < 0)
+        (diff *= 0.6456);
+    else
+        diff *= 0.44;
+
+    //cout << "diff: " << diff << endl;
+
+    //odległość
     distance = hill.startDist;
-    distance += takeoffPower * hill.takeoffPowerMeters;
+    distance += (gate * hill.gateMeters);
+    //cout << distance;
+    //cout << "windb: " << windB << endl;
+    // cout << hill.windMetersFront << endl;
+    if (windB > 0)
+        distance += (windB * hill.windMetersFront);
+    else if (windB < 0)
+        distance += (windB * hill.windMetersBack);
+
+    distance += (diff * hill.takeoffPowerImportance);
     distance += takeoffTechnique * hill.takeoffTechniqueMeters;
     distance += flightTechnique * hill.flightTechniqueMeters;
 
-    cout << "Moc wybicia: " << takeoffPower << ", Technika wybicia: "
+    cout << "Wiatr: " << windB << ", Moc wybicia: " << takeoffPower << ", Technika wybicia: " << takeoffTechnique
          << ", Technika lotu: " << flightTechnique << ", Odleglosc: " << distance << endl;
 }
 
@@ -460,10 +470,87 @@ void loadHills()
         getline(hlf, tmp, ',');
         vechill.skisPositionEffect = stod(tmp);
         getline(hlf, tmp, ',');
-        vechill.takeoffPowerMeters = stod(tmp);
-        getline(hlf, tmp);
+        vechill.optimalTakeoffPower = stoi(tmp);
+        getline(hlf, tmp, ',');
+        vechill.takeoffPowerImportance = stod(tmp);
+        getline(hlf, tmp, ',');
         vechill.takeoffTechniqueMeters = stod(tmp);
+        getline(hlf, tmp);
+        vechill.flightTechniqueMeters = stod(tmp);
         hills.push_back(vechill);
     }
     hlf.close();
+}
+
+void loadJumpers(bool ifForm)
+{
+    Jumper jp;
+    string tmp;
+    jpf.open("../resources/jumpers.csv", ios::in);
+    while (getline(jpf, jp.name, ','))
+    {
+        getline(jpf, jp.surname, ',');
+        getline(jpf, jp.nationality, ',');
+        getline(jpf, tmp, ',');
+        jp.height = stoi(tmp);
+        getline(jpf, tmp, ',');
+        jp.age = stoi(tmp);
+        getline(jpf, tmp, ',');
+        jp.takeoffPowerS = stoi(tmp);
+        getline(jpf, tmp, ',');
+        jp.takeoffTechniqueS = stoi(tmp);
+        getline(jpf, tmp, ',');
+        jp.flightTechniqueS = stoi(tmp);
+        getline(jpf, tmp, ',');
+        jp.flightStyle = stoi(tmp);
+        getline(jpf, tmp, ',');
+        jp.skisPositionS = stoi(tmp);
+        getline(jpf, tmp, ',');
+        jp.landSkillS = stoi(tmp);
+        getline(jpf, tmp, ',');
+        jp.landStyleS = stoi(tmp);
+        getline(jpf, tmp, ',');
+        jp.expernice = stoi(tmp);
+        if (ifForm == true)
+        {
+            getline(jpf, tmp, ',');
+            jp.form = stoi(tmp);
+        }
+        getline(jpf, tmp);
+        jp.injuryResistance = stoi(tmp);
+        jumpersList.push_back(jp);
+    }
+    jpf.close();
+}
+
+void loadTrainingConfig()
+{
+    string tmp;
+    tcf.open("../resources/trainingcofigfile.csv", ios::in);
+    getline(tcf, tmp, ',');
+    hill.windFaulty = stod(tmp);
+}
+
+void selectTrainingJumper()
+{
+    int i = 1;
+    int c;
+    for (auto jp : jumpersList)
+    {
+        cout << i << ". " << jp.name << " " << jp.surname << " (" << jp.nationality << ") (" << jp.age << " lat ) "
+             << "(Forma: " << jp.form << ")" << endl;
+        i++;
+    }
+    Sleep(300);
+    cout << "Skoczek: ";
+    cin >> c;
+    trainingJumper = jumpersList[c - 1];
+}
+
+void showHillInfo(Hill hl)
+{
+    cout << hl.name << " (" << hl.country << ") K" << hl.kpoint << " HS" << hl.hspoint << " (" << percent(95, hl.hspoint) << ") " << endl;
+    cout << "Punkty za belke: " << hl.gatePoints << endl;
+    cout << "Punkty za wiatr przedni: " << hl.windPointsFront << endl;
+    cout << "Punkty za wiatr tylni: " << hl.windPointsBack << endl;
 }
