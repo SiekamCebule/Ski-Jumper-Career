@@ -7,7 +7,6 @@ void Save::initSave(string filename)
 void Jumper::afterStart()
 {
     cout << name << " " << surname << " (" << nationality << ")" << endl;
-    getch();
 }
 
 void Jumper::jump()
@@ -90,56 +89,149 @@ void Jumper::jump()
 
     compensationGate = (hill.startGate - gate) * hill.gatePoints;
 
-    double diff;
-    diff = (takeoffPower - hill.optimalTakeoffPower);
+    takeoffPowerDiff = (takeoffPower - hill.optimalTakeoffPower);
 
-    if (diff < 0)
-        (diff *= 0.6456);
+    if (takeoffPowerDiff < 0)
+        (takeoffPowerDiff *= 0.6456);
     else
-        diff *= 0.44;
+        takeoffPowerDiff *= 0.44;
 
-    //odlegàoòÜ
-    distance = hill.startDist;
-    //cout << "Odl: " << distance << endl;
-    distance += (gate * hill.gateMeters);
-    //cout << "Odl: " << distance << endl;
+    basicDistance();
+    land();
 
-    if (windB > 0)
-        distance += (windB * hill.windMetersFront);
-    else if (windB < 0)
-        distance += (windB * hill.windMetersBack);
-    //cout << "Odl: " << distance << endl;
-
-    //wiatr
-    //for (auto sn : windSensor)
-    //  sn += randomDouble(-hill.windFaulty, hill.windFaulty);
-
-    distance += (diff * hill.takeoffPowerImportance);
-    //cout << "Odl: " << distance << endl;
-    distance += takeoffTechnique * hill.takeoffTechniqueMeters;
-    //cout << "Odl: " << distance << endl;
-    distance += flightTechnique * hill.flightTechniqueMeters;
-    //cout << "Odl: " << distance << endl;
-    for (int i = 0; i < 5; i++)
-    {
-        if (flightStyle == i)
-        {
-            distance += hill.flightStyleMeters[i];
-        }
-    }
-    //cout << "Odl: " << distance << endl;
-    distance = round(distance * 2) / 2;
-    //cout << "Odl: " << distance << endl;
-
+    points = (hill.pointsForK + (hill.metersPoints * (distance - hill.kpoint) + judgesAll + (compensationGate + compensationWind)));
     if (points < 0)
         points = 0;
-    points = (hill.pointsForK + (hill.metersPoints * (distance - hill.kpoint) + judgesAll + (compensationGate + compensationWind)));
+}
+
+void Jumper::land()
+{
+    int rd, rd1;
+
+    landRating = landSkillS + form / 13 + landStyleS / 25;
+    landRating += normalRandom(0, 3);
+
+    if (landRating > 80)
+        landRating = 80;
+    else if (landRating < 1)
+        landRating = 1;
+
+    judgeRating = 15;
+    judgeRating += landRating / 20.755;
+    judgeRating += ((distance - hill.kpoint) / hill.judgeDivider);
+
+    judgeRating = (round(judgeRating) * 2) / 2;
+
+    rd = randomInt(0, 1000 * 100);
+    rd1 = 76850 - (landRating * 350) - (expernice * 100);
+    rd1 -= ((hill.maxdist - distance) * 16 * hill.hsLandDifficulty);
+    if (rd1 < 0)
+        rd1 = randomInt(200, 900);
+
+    cout << "rd1: " << rd1 << endl;
+    getch();
+    if (rd < rd1)
+    {
+        landType = 4;
+        judgeRating -= (9 + (randomInt(1, 1) / 2));
+    }
+    else
+    {
+        rd = randomInt(1, 1000 * 100);
+        rd1 = 65210 - (landRating * 350) - (expernice * 100);
+        rd1 -= ((hill.maxdist - distance) * 18.5 * hill.hsLandDifficulty);
+        if (rd1 < 0)
+            rd1 = randomInt(250, 950);
+        cout << "rd1: " << rd1 << endl;
+        getch();
+        if (rd < rd1)
+        {
+            landType = 3;
+            judgeRating -= (7 + (randomInt(1, 1) / 2));
+        }
+        else
+        {
+            rd = randomInt(1, 1000 * 100);
+            rd1 = 103539 - (landRating * 350) - (expernice * 100);
+            rd1 -= ((hill.maxdist - distance) * 20.7 * hill.hsLandDifficulty);
+            if (rd1 < 0)
+                rd1 = randomInt(2000, 7000);
+
+            cout << "rd1: " << rd1 << endl;
+            getch();
+            if (rd < rd1)
+            {
+                landType = 2;
+                judgeRating -= randomInt(1, 2);
+                rd = randomInt(1, 30);
+                if (rd == 1)
+                    judgeRating -= 1;
+                else
+                {
+                    landType = 2;
+                    judgeRating -= (randomInt(-1, 1) / 2);
+                }
+            }
+            else
+                landType = 1;
+        }
+    }
+
+    for (auto &jdg : judges)
+    {
+        jdg = judgeRating;
+        rd = randomInt(1, 5);
+        if (rd == 1)
+            jdg += (-0.5);
+        if (rd == 2 || rd == 3 || rd == 4)
+            jdg += (0);
+        if (rd == 5)
+            jdg += (0.5);
+
+        rd = (randomInt(1, 20));
+        if (rd == 1)
+            jdg += (-1);
+        if (rd == 2)
+            jdg += (1);
+
+        if (jdg > 20)
+            jdg = 20;
+        else if (jdg < 1)
+            jdg = 1;
+    }
+
+    minJudge = judges[0];
+    maxJudge = judges[0];
+    for (auto jg : judges)
+    {
+        if (jg < minJudge)
+            minJudge = jg;
+        if (jg > maxJudge)
+            maxJudge = jg;
+    }
+    judgesAll = 0;
+    for (auto jg : judges)
+    {
+        judgesAll += jg;
+    }
+    judgesAll -= (minJudge + maxJudge);
+
+    getch();
 }
 
 void Jumper::showResult()
 {
     cout << name << " " << surname << " (" << nationality << ")" << endl;
     cout << "OdlegàoòÜ: " << distance << "m" << endl;
+
+    cout << "| ";
+    for (auto jdg : judges)
+    {
+        cout << jdg << " | ";
+        Sleep(300);
+    }
+    cout << endl;
+
     if (windB < 0)
     {
         colorText(12, "Wiatr: ");
@@ -159,17 +251,17 @@ void Jumper::showResult()
     cout << endl;
     if (compensationGate < 0)
     {
-        colorText(12, "Za belke: ");
+        colorText(12, "Za belk©: ");
         colorText(12, to_string(compensationGate));
     }
     else if (compensationGate > 0)
     {
-        colorText(10, "Za belke: ");
+        colorText(10, "Za belk©: ");
         colorText(10, to_string(compensationGate));
     }
     else
     {
-        colorText(7, "Za belke: ");
+        colorText(7, "Za belk©: ");
         colorText(7, to_string(compensationGate));
     }
     cout << endl;
@@ -191,22 +283,34 @@ void Jumper::showResult()
     cout << endl;
     if ((compensationWind + compensationGate) < 0)
     {
-        colorText(12, "Lacznie: ");
+        colorText(12, "ù•cznie: ");
         colorText(12, to_string((compensationWind + compensationGate)));
     }
     else if ((compensationWind + compensationGate) > 0)
     {
-        colorText(10, "Lacznie: ");
+        colorText(10, "ù•cznie: ");
         colorText(10, to_string((compensationWind + compensationGate)));
     }
     else
     {
-        colorText(7, "Lacznie: ");
+        colorText(7, "ù•cznie: ");
         colorText(7, to_string((compensationWind + compensationGate)));
     }
 
     SetConsoleTextAttribute(hcon, 15);
     cout << "\nPunkty: " << points << endl;
+
+    cout << "Skok zako‰czony ";
+    if (landType == 1)
+        colorText(11, "telemarkiem");
+    else if (landType == 2)
+        colorText(3, "l•dowaniem na dwie nogi");
+    else if (landType == 3)
+        colorText(5, "podp¢rk•");
+    else if (landType == 4)
+        colorText(12, "upadkiem");
+
+    SetConsoleTextAttribute(hcon, 15);
 }
 
 void Jumper::showHideInfo()
@@ -245,6 +349,33 @@ void Jumper::showDistanceAndToBeat()
         cls;
     }
     cls;
+}
+
+void Jumper::basicDistance()
+{
+    distance = hill.startDist;
+    distance += (gate * hill.gateMeters);
+
+    if (windB > 0)
+        distance += (windB * hill.windMetersFront);
+    else if (windB < 0)
+        distance += (windB * hill.windMetersBack);
+
+    distance += (takeoffPowerDiff * hill.takeoffPowerImportance);
+    distance += takeoffTechnique * hill.takeoffTechniqueMeters;
+    distance += flightTechnique * hill.flightTechniqueMeters;
+
+    for (int i = 0; i < 5; i++)
+    {
+        if (flightStyle == i)
+        {
+            distance += hill.flightStyleMeters[i];
+        }
+    }
+
+    if (distance > hill.maxdist)
+        distance = hill.maxdist + normalRandom(0, hill.maxdistRandom);
+    distance = round(distance * 2) / 2;
 }
 
 void Hill::startup()
@@ -418,6 +549,8 @@ void loadHills()
         getline(hlf, tmp, ',');
         vechill.maxdist = stod(tmp);
         getline(hlf, tmp, ',');
+        vechill.maxdistRandom = stod(tmp);
+        getline(hlf, tmp, ',');
         vechill.startDist = stod(tmp);
         getline(hlf, tmp, ',');
         vechill.hsLandDifficulty = stod(tmp);
@@ -437,8 +570,10 @@ void loadHills()
         vechill.takeoffPowerImportance = stod(tmp);
         getline(hlf, tmp, ',');
         vechill.takeoffTechniqueMeters = stod(tmp);
-        getline(hlf, tmp);
+        getline(hlf, tmp, ',');
         vechill.flightTechniqueMeters = stod(tmp);
+        getline(hlf, tmp);
+        vechill.judgeDivider = stod(tmp);
         hills.push_back(vechill);
     }
     hlf.close();

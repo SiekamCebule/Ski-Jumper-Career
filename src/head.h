@@ -38,21 +38,24 @@ public:
     int takeoffPowerS, takeoffTechniqueS;
     int skisPositionS, flightStyle;
     int takeoffPower, takeoffTechnique;
-    int skisPosition, transitionSpeed;
     int flightTechnique, flightTechniqueS;
-    int landSkillS, landStyleS;
+    int landSkillS, landStyleS, landType;
+    double landRating;
     int expernice, condition, readyToJump, form, happiness, injuryResistance;
     int gate;
     double distance, toBeat;
     double judges[5], minJudge, maxJudge, wind, windB, windBonus, judgeRating, judgesPoints, judgesAll;
     double points, compensationGate, compensationWind;
     bool dsq;
+    double takeoffPowerDiff;
     double windSensor[10];
     void afterStart();
     void jump();
+    void land();
     void showResult();
     void showHideInfo();
     void showDistanceAndToBeat();
+    void basicDistance();
 };
 
 class Hill
@@ -61,7 +64,7 @@ public:
     string name, country, type;
     double gatePoints, gateMeters;
     int kpoint, hspoint, pointsForK;
-    double maxdist;
+    double maxdist, maxdistRandom;
     double windMetersFront, windMetersBack, windPointsFront, windPointsBack;
     double metersPoints, hsLandDifficulty;
     double startDist, takeoffDist, flightDist, minWindChange, maxWindChange;
@@ -70,11 +73,9 @@ public:
     double takeoffTechniqueMeters, flightTechniqueMeters;
     int optimalTakeoffPower;
     double flightStyleMeters[5];
-    double takeoffPowerImportance;
+    double takeoffPowerImportance, judgeDivider;
     int startGate;
     double typicalWind[2], windChange[2], startWind;
-
-    //config
 
     double windFaulty;
     void startup();
