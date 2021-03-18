@@ -44,3 +44,24 @@ Po prostu powyżej 100 skoczek będzie już bardzo dobry, i światowa czołówka
 * Metry za technikę wybicia (Ile punktów zyskuje się za dobre wybicie. Najlepiej podpatrzeć z innych skoczni)
 * Metry za technike lotu (Tak jak z techniką wybicia)
 * Dzielnik not sędziowskich: Do noty za styl jest dodawana odległość za punktem K podzielona przez dzielnik.
+
+## Atrybuty ustawień treningu ##
+Ważność skoku (od 1 do 5)
+Zakres wiatru minimalny
+Zakres wiatru maksymalny (przed początkiem konkursu następuje losowanie podstawowego wiatru z tego zakresu. Potem dochodzi jeszcze loteryjność i wadliwość przelczników)
+Zakres zmiany wiatru minimalny
+Zakres zmiany wiatru maksymalny (jest losowanie z tego zakresu, a później wylosowaną wartość dodaje się do podstawowego wiatru)
+Punkty za belke (0 - nie, 1 - tak)
+Punkty za wiatr (0 - nie, 1 - tak)
+Noty sędziowskie (0 - nie, 1 - tak)
+
+
+## Plki z zasobami##
+
+**(Wartości w plikach trzeba oddzielać przecinkami!!!)** <br>
+* **hills.csv** - Wpisuje sie tam skocznie w kolejności w jakiej podane są atrybuty skoczni. <br>
+* **jumpers.csv** - Wpisuje sie tam skoczków do trybu kariery, i do trybu treningu.
+Kolejność: Imię,Nazwisko,Narodowość,Wiek,Wzrost,Moc wybicia, Technika wybicia, Technika lotu, Styl lotu, Umiejętność lądowania, Styl lądowania, Doświadczenie, Forma, Odporność na kontuzje
+* **trainingconfig.csv** - Wpisuje się w takiej kolejności jak w atrybutach ustawień treningu.
+
+(reszta plików póki co nie ma znaczenia)
