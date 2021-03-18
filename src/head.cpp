@@ -13,26 +13,43 @@ void Jumper::jump()
 {
     hill.startup();
     hill.setType();
-    wind += randomDouble(hill.windChange[0], hill.windChange[1]);
-    windB = wind + normalRandom(0, hill.windFaulty);
+    wind += randomDouble(comp.windChange[0], comp.windChange[1]);
+    windB = wind + normalRandom(0, comp.windFaulty);
+
+    setTakeoffPower();
+    setTakeoffTechnique();
+    setFlightTechnique();
+
+    setGateAndWindMeters();
+    heightWindMeters();
 
     int rd;
-    if (takeoffPowerS > 120)
-        takeoffPowerS = 120;
-    if (takeoffPowerS < 1)
-        takeoffPowerS = 1;
-    if (takeoffTechniqueS > 120)
-        takeoffTechniqueS = 120;
-    if (takeoffTechniqueS < 1)
-        takeoffTechniqueS = 1;
-    if (flightTechniqueS > 120)
-        flightTechniqueS = 120;
-    if (flightTechniqueS < 1)
-        flightTechniqueS = 1;
+
     if (flightStyle > 4)
         flightStyle = 2; //Styl "nowoczesne V 1"
     if (skisPositionS > 14)
         skisPositionS = 10;
+
+    takeoffPowerDiff = (takeoffPower - hill.optimalTakeoffPower);
+
+    if (takeoffPowerDiff < 0)
+        (takeoffPowerDiff *= 0.6456);
+    else
+        takeoffPowerDiff *= 0.44;
+
+    basicDistance();
+    land();
+    setPoints();
+    setToBeat();
+}
+
+void Jumper::setTakeoffPower()
+{
+    if (takeoffPowerS > 120)
+        takeoffPowerS = 120;
+    if (takeoffPowerS < 1)
+        takeoffPowerS = 1;
+
     takeoffPower = (takeoffPowerS);
     takeoffPower += normalRandom(0, 5);
     takeoffPower = round(takeoffPower);
@@ -40,6 +57,13 @@ void Jumper::jump()
         takeoffPower = 160;
     else if (takeoffPower < 1)
         takeoffPower = 1;
+}
+void Jumper::setTakeoffTechnique()
+{
+    if (takeoffTechniqueS > 120)
+        takeoffTechniqueS = 120;
+    if (takeoffTechniqueS < 1)
+        takeoffTechniqueS = 1;
 
     takeoffTechnique = (takeoffTechniqueS * 0.987) + (form * 1.05);
     takeoffTechnique += normalRandom(0, 7);
@@ -48,6 +72,13 @@ void Jumper::jump()
         takeoffTechnique = 280;
     if (takeoffTechnique < 1)
         takeoffTechnique = 1;
+}
+void Jumper::setFlightTechnique()
+{
+    if (flightTechniqueS > 120)
+        flightTechniqueS = 120;
+    if (flightTechniqueS < 1)
+        flightTechniqueS = 1;
 
     int test1 = 20 - hill.flightStyleMeters[flightStyle] + randomInt(-4, 0);
     flightTechnique = (flightTechniqueS * 0.887) + (form * 1.15);
@@ -68,7 +99,10 @@ void Jumper::jump()
         flightTechnique = 280;
     if (flightTechnique < 1)
         flightTechnique = 1;
+}
 
+void Jumper::setGateAndWindMeters()
+{
     if (hill.gateMeters == (-1))
     {
         hill.gateMeters = (hill.gatePoints / hill.metersPoints);
@@ -81,23 +115,18 @@ void Jumper::jump()
     {
         hill.windMetersFront = (hill.windMetersFront / hill.metersPoints);
     }
-
-    if (windB < 0)
-        compensationWind = -windB * hill.windPointsBack;
-    else if (windB > 0)
-        compensationWind = -windB * hill.windPointsFront;
-
-    compensationGate = (hill.startGate - gate) * hill.gatePoints;
-
-    takeoffPowerDiff = (takeoffPower - hill.optimalTakeoffPower);
-
-    if (takeoffPowerDiff < 0)
-        (takeoffPowerDiff *= 0.6456);
-    else
-        takeoffPowerDiff *= 0.44;
-
-    basicDistance();
-    land();
+}
+void Jumper::setPoints()
+{
+    if (comp.windComp == 1)
+    {
+        if (windB < 0)
+            compensationWind = -windB * hill.windPointsBack;
+        else if (windB > 0)
+            compensationWind = -windB * hill.windPointsFront;
+    }
+    if (comp.gateComp == 1)
+        compensationGate = (comp.startGate - gate) * hill.gatePoints;
 
     points = (hill.pointsForK + (hill.metersPoints * (distance - hill.kpoint) + judgesAll + (compensationGate + compensationWind)));
     if (points < 0)
@@ -116,7 +145,8 @@ void Jumper::land()
     else if (landRating < 1)
         landRating = 1;
 
-    judgeRating = 15;
+    judgeRating = 4.9;
+    judgeRating += (double)landStyleS / 5.5;
     judgeRating += landRating / 20.755;
     judgeRating += ((distance - hill.kpoint) / hill.judgeDivider);
 
@@ -128,8 +158,8 @@ void Jumper::land()
     if (rd1 < 0)
         rd1 = randomInt(200, 900);
 
-    cout << "rd1: " << rd1 << endl;
-    getch();
+    //cout << "rd1: " << rd1 << endl;
+    //getch();
     if (rd < rd1)
     {
         landType = 4;
@@ -142,8 +172,8 @@ void Jumper::land()
         rd1 -= ((hill.maxdist - distance) * 18.5 * hill.hsLandDifficulty);
         if (rd1 < 0)
             rd1 = randomInt(250, 950);
-        cout << "rd1: " << rd1 << endl;
-        getch();
+        //cout << "rd1: " << rd1 << endl;
+        //getch();
         if (rd < rd1)
         {
             landType = 3;
@@ -157,8 +187,8 @@ void Jumper::land()
             if (rd1 < 0)
                 rd1 = randomInt(2000, 7000);
 
-            cout << "rd1: " << rd1 << endl;
-            getch();
+            //cout << "rd1: " << rd1 << endl;
+            //getch();
             if (rd < rd1)
             {
                 landType = 2;
@@ -176,61 +206,97 @@ void Jumper::land()
                 landType = 1;
         }
     }
-
-    for (auto &jdg : judges)
+    if (comp.isJudges == 1)
     {
-        jdg = judgeRating;
-        rd = randomInt(1, 5);
-        if (rd == 1)
-            jdg += (-0.5);
-        if (rd == 2 || rd == 3 || rd == 4)
-            jdg += (0);
-        if (rd == 5)
-            jdg += (0.5);
+        for (auto &jdg : judges)
+        {
+            jdg = judgeRating;
+            rd = randomInt(1, 5);
+            if (rd == 1)
+                jdg += (-0.5);
+            if (rd == 2 || rd == 3 || rd == 4)
+                jdg += (0);
+            if (rd == 5)
+                jdg += (0.5);
 
-        rd = (randomInt(1, 20));
-        if (rd == 1)
-            jdg += (-1);
-        if (rd == 2)
-            jdg += (1);
+            rd = (randomInt(1, 20));
+            if (rd == 1)
+                jdg += (-1);
+            if (rd == 2)
+                jdg += (1);
 
-        if (jdg > 20)
-            jdg = 20;
-        else if (jdg < 1)
-            jdg = 1;
+            if (jdg > 20)
+                jdg = 20;
+            else if (jdg < 1)
+                jdg = 1;
+        }
+
+        minJudge = judges[0];
+        maxJudge = judges[0];
+        for (auto jg : judges)
+        {
+            if (jg < minJudge)
+                minJudge = jg;
+            if (jg > maxJudge)
+                maxJudge = jg;
+        }
+        judgesAll = 0;
+        for (auto jg : judges)
+        {
+            judgesAll += jg;
+        }
+        judgesAll -= (minJudge + maxJudge);
     }
+}
 
-    minJudge = judges[0];
-    maxJudge = judges[0];
-    for (auto jg : judges)
-    {
-        if (jg < minJudge)
-            minJudge = jg;
-        if (jg > maxJudge)
-            maxJudge = jg;
-    }
-    judgesAll = 0;
-    for (auto jg : judges)
-    {
-        judgesAll += jg;
-    }
-    judgesAll -= (minJudge + maxJudge);
+void Jumper::heightWindMeters()
+{
 
-    getch();
+    // cout << height << endl;
+
+    double wm1 = 1, wm2 = 1;
+    wm1 += ((height - 178) * 0.15);
+    hill.windMetersFront += wm1;
+    wm2 += ((178 - height) * 0.15);
+    hill.windMetersBack -= wm1;
+
+    //cout << "1: " << wm1 << " 2: " << wm2 << endl;
+
+    //cout << "Front: " << hill.windMetersFront << "Back: " << hill.windMetersBack << endl;
 }
 
 void Jumper::showResult()
 {
     cout << name << " " << surname << " (" << nationality << ")" << endl;
-    cout << "Odlegˆo˜†: " << distance << "m" << endl;
-
-    cout << "| ";
-    for (auto jdg : judges)
+    cout << "Odlegˆo˜†: " << distance << "m"
+         << " (Belka " << gate << " (";
+    int test1 = gate - comp.startGate;
+    if (test1 > 0)
     {
-        cout << jdg << " | ";
-        Sleep(300);
+        colorText(2, "+");
+        colorText(2, to_string(test1));
     }
-    cout << endl;
+    if (test1 == 0)
+    {
+        colorText(7, "+0");
+    }
+    if (test1 < 0)
+    {
+        colorText(2, to_string(test1));
+    }
+    SetConsoleTextAttribute(hcon, 15);
+    cout << "))" << endl;
+
+    if (comp.isJudges == 1)
+    {
+        cout << "| ";
+        for (auto jdg : judges)
+        {
+            cout << jdg << " | ";
+            Sleep(300);
+        }
+        cout << endl;
+    }
 
     if (windB < 0)
     {
@@ -322,6 +388,7 @@ void Jumper::showDistanceAndToBeat()
 {
     for (int i = 0; i <= distance; i++)
     {
+        // cout << "To Beat: " << toBeat << endl;
         if (i == distance)
         {
             cout << "| " << i << "m |" << endl;
@@ -376,6 +443,32 @@ void Jumper::basicDistance()
     if (distance > hill.maxdist)
         distance = hill.maxdist + normalRandom(0, hill.maxdistRandom);
     distance = round(distance * 2) / 2;
+}
+
+void Jumper::setToBeat()
+{
+    toBeat = comp.leaderPoints - hill.pointsForK;
+    if (comp.isJudges == 1)
+        toBeat -= 54;
+
+    if (comp.gateComp == 1)
+        toBeat -= compensationGate;
+
+    if (comp.windComp == 1)
+        toBeat -= compensationWind;
+
+    toBeat /= hill.metersPoints;
+    toBeat += hill.kpoint;
+    toBeat = ceil(toBeat * 2) / 2;
+}
+void Competition::setLeaderPoints()
+{
+    double top = jumpers[0].points;
+    for (auto &jp : jumpers)
+    {
+        if (jp.points > top)
+            top = jp.points;
+    }
 }
 
 void Hill::startup()
@@ -508,7 +601,8 @@ void selectTrainingHill()
     int i = 1, c;
     for (auto hill : hills)
     {
-        cout << i << ". " << hill.name << " (" << hill.country << ") " << hill.kpoint << " " << hill.hspoint << endl;
+        cout << i << ". " << hill.name << " (" << hill.country << ") "
+             << "K" << hill.kpoint << " HS" << hill.hspoint << endl;
         i++;
     }
     cout << "Skocznia: ";
@@ -589,9 +683,9 @@ void loadJumpers(bool ifForm)
         getline(jpf, jp.surname, ',');
         getline(jpf, jp.nationality, ',');
         getline(jpf, tmp, ',');
-        jp.height = stoi(tmp);
-        getline(jpf, tmp, ',');
         jp.age = stoi(tmp);
+        getline(jpf, tmp, ',');
+        jp.height = stoi(tmp);
         getline(jpf, tmp, ',');
         jp.takeoffPowerS = stoi(tmp);
         getline(jpf, tmp, ',');
@@ -624,20 +718,23 @@ void loadTrainingConfig()
     ;
     tcf.open("../resources/trainingconfig.csv", ios::in);
     getline(tcf, tmp, ',');
-    hill.windFaulty = stod(tmp);
-    //cout << tmp;
+    comp.importance = stoi(tmp);
     getline(tcf, tmp, ',');
-    hill.typicalWind[0] = stod(tmp);
-    //cout << tmp;
+    comp.windFaulty = stod(tmp);
     getline(tcf, tmp, ',');
-    hill.typicalWind[1] = stod(tmp);
-    //cout << tmp;
+    comp.typicalWind[0] = stod(tmp);
     getline(tcf, tmp, ',');
-    hill.windChange[0] = stod(tmp);
-    //cout << tmp;
+    comp.typicalWind[1] = stod(tmp);
+    getline(tcf, tmp, ',');
+    comp.windChange[0] = stod(tmp);
+    getline(tcf, tmp, ',');
+    comp.windChange[1] = stod(tmp);
+    getline(tcf, tmp, ',');
+    comp.gateComp = stoi(tmp);
+    getline(tcf, tmp, ',');
+    comp.windComp = stoi(tmp);
     getline(tcf, tmp);
-    hill.windChange[1] = stod(tmp);
-    //cout << tmp;
+    comp.isJudges = stoi(tmp);
     tcf.close();
 }
 
@@ -663,4 +760,24 @@ void showHillInfo(Hill hl)
     cout << "Punkty za belke: " << hl.gatePoints << endl;
     cout << "Punkty za wiatr przedni: " << hl.windPointsFront << endl;
     cout << "Punkty za wiatr tylni: " << hl.windPointsBack << endl;
+}
+
+void showJumpers()
+{
+    int i = 1;
+    for (auto jp : jumpersList)
+    {
+        cout << i << ". " << jp.name << " " << jp.surname << " (" << jp.nationality << ")" << endl;
+        i++;
+    }
+}
+
+void Competition::showHideInfo()
+{
+    cout << "Przeliczniki za belke: " << (bool)comp.gateComp << endl
+         << "Przeliczniki za wiatr: " << (bool)comp.windComp << endl
+         << "Noty s©dziowskie: " << (bool)comp.isJudges << endl
+         << "Zakres wiatru: " << typicalWind[0] << " - " << typicalWind[1] << endl
+         << "Podstawowy wiatr: " << startWind << endl
+         << "Falszywosc przelicznik¢w: " << windFaulty << endl;
 }

@@ -51,11 +51,18 @@ public:
     double windSensor[10];
     void afterStart();
     void jump();
+    void setTakeoffPower();
+    void setTakeoffTechnique();
+    void setFlightTechnique();
+    void setGateAndWindMeters();
+    void setPoints();
     void land();
+    void heightWindMeters();
     void showResult();
     void showHideInfo();
     void showDistanceAndToBeat();
     void basicDistance();
+    void setToBeat();
 };
 
 class Hill
@@ -74,19 +81,32 @@ public:
     int optimalTakeoffPower;
     double flightStyleMeters[5];
     double takeoffPowerImportance, judgeDivider;
-    int startGate;
-    double typicalWind[2], windChange[2], startWind;
-
-    double windFaulty;
     void startup();
     void setType();
 };
+class Competition
+{
+public:
+    string name;
+    int importance;
+    Hill hill;
+    vector<Jumper> jumpers;
+    vector<Jumper> sortJumpers;
+    int startGate;
+    double typicalWind[2], windChange[2], startWind, windFaulty, leaderPoints;
+    bool gateComp, windComp, isJudges;
+    void sortResults();
+    void showHideInfo();
+    void setLeaderPoints();
+};
+
 class Time
 {
 public:
     int year, month, day;
     void skip(int nmb);
 };
+
 class Save
 {
 public:
@@ -97,6 +117,8 @@ public:
     void load(string filename);
 };
 Hill hill;
+Competition comp;
+vector<Competition> comps;
 Jumper trainingJumper;
 Save save;
 fstream hillsfile, jumpersfile, trainingconfigfile, nationsfile;
@@ -113,6 +135,7 @@ void loadTrainingConfig();
 void selectTrainingHill();
 void selectTrainingJumper();
 void showHillInfo(Hill hl);
+void showJumpers();
 
 vector<Hill> hills;
 vector<Jumper> jumpersList;

@@ -7,14 +7,13 @@ int main()
     loadHills();
     loadJumpers(true);
 
-    //cout << "Skoczek (MW, TW, F, TL): ";
-    //cin >> testjumper.takeoffPowerS >> testjumper.takeoffTechniqueS >> testjumper.form >> testjumper.flightTechniqueS;
     char choice;
     string choice1;
-    cout << "Ski Jumper Perspective " << APP_VERSION;
-    cout << "\nOpcje: \n1. Nowy zapis gry\n2. Wczytaj istniej¥cy zapis gry\n3. Wy˜wietl wczytane zasoby\n4. Pojedyäczy skok\n";
+    /*cout << "Ski Jumper Perspective " << APP_VERSION;
+    cout << "\nOpcje: \n1. Nowy zapis gry (niedostepne)\n2. Wczytaj istniej¥cy zapis gry (niedostepne)\n3. Wy˜wietl wczytane zasoby (niedostepne)\n4. Pojedyäczy skok\n";
     choice = getch();
-    cls;
+    cls;*/
+    choice  = '4';
     switch (choice)
     {
     case '1':
@@ -31,20 +30,28 @@ int main()
             {
                 selectTrainingHill();
                 loadTrainingConfig();
+                comp.jumpers = jumpersList;
                 cout << "Belka startowa: ";
-                cin >> hill.startGate;
-                hill.startWind = randomDouble(hill.typicalWind[0], hill.typicalWind[1]);
-                for (auto jp : jumpersList)
+                cin >> comp.startGate;
+                comp.startWind = randomDouble(comp.typicalWind[0], comp.typicalWind[1]);
+                cls;
+                cout<<"Lista startowa: "<<endl;
+                showJumpers();
+                getch();
+                cls;
+                for (auto &jp : comp.jumpers)
                 {
+                    jp.wind = comp.startWind;
                     cls;
                     jp.afterStart();
                     cout << "Belka: ";
                     cin >> jp.gate;
-                    cout << "Wiatr: ";
-                    cin >> jp.wind;
+                    //comp.setLeaderPoints();
                     jp.jump();
                     jp.showDistanceAndToBeat();
                     jp.showResult();
+                    cout << endl;
+                    //jp.showHideInfo();
                     getch();
                     cls;
                 }
