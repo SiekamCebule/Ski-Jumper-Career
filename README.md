@@ -60,8 +60,8 @@ Noty sędziowskie (0 - nie, 1 - tak)
 
 **(Wartości w plikach trzeba oddzielać przecinkami!!!)** <br>
 * **hills.csv** - Wpisuje sie tam skocznie w kolejności w jakiej podane są atrybuty skoczni. <br>
-* **jumpers.csv** - Wpisuje sie tam skoczków do trybu kariery, i do trybu treningu.
-Kolejność: Imię,Nazwisko,Narodowość,Wiek,Wzrost,Moc wybicia, Technika wybicia, Technika lotu, Styl lotu, Umiejętność lądowania, Styl lądowania, Doświadczenie, Forma, Odporność na kontuzje
-* **trainingconfig.csv** - Wpisuje się w takiej kolejności jak w atrybutach ustawień treningu.
+* **jumpers.csv** - Wpisuje sie tam skoczków do trybu kariery, i do trybu treningu.<br>
+Kolejność: Imię,Nazwisko,Narodowość,Wiek,Wzrost,Moc wybicia, Technika wybicia, Technika lotu, Styl lotu, Umiejętność lądowania, Styl lądowania, Doświadczenie, Forma, Odporność na kontuzje<br>
+* **trainingconfig.csv** - Wpisuje się w takiej kolejności jak w atrybutach ustawień treningu.<br>
 
 (reszta plików póki co nie ma znaczenia)
