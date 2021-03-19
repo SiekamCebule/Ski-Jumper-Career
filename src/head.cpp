@@ -16,13 +16,13 @@ void Jumper::jump()
     wind += randomDouble(comp.windChange[0], comp.windChange[1]);
     windB = wind + normalRandom(0, comp.windFaulty);
 
+    setOtherComponents();
     setTakeoffPower();
     setTakeoffTechnique();
     setFlightTechnique();
-
-    setGateAndWindMeters();
     heightWindMeters();
-
+    setGateAndWindMeters();
+    
     int rd;
 
     if (flightStyle > 4)
@@ -67,6 +67,8 @@ void Jumper::setTakeoffTechnique()
 
     takeoffTechnique = (takeoffTechniqueS * 0.987) + (form * 1.05);
     takeoffTechnique += normalRandom(0, 7);
+    takeoffTechnique += randomInt((comp.importance - 6), 0);
+    takeoffTechnique -= trackRain;
     takeoffTechnique = round(takeoffTechnique);
     if (takeoffTechnique > 280)
         takeoffTechnique = 280;
@@ -83,7 +85,7 @@ void Jumper::setFlightTechnique()
     int test1 = 20 - hill.flightStyleMeters[flightStyle] + randomInt(-4, 0);
     flightTechnique = (flightTechniqueS * 0.887) + (form * 1.15);
     if (flightStyle == 0)
-        flightTechnique += randomInt(-11, -5);
+        flightTechnique += randomInt(-12, -6);
     else if (flightStyle == 1)
         flightTechnique += randomInt(-2, 2);
     else if (flightStyle == 2)
@@ -94,6 +96,8 @@ void Jumper::setFlightTechnique()
         flightTechnique += randomInt(-5, 5);
 
     flightTechnique += normalRandom(0, 7);
+    flightTechnique += randomInt((comp.importance - 6), 0);
+    flightTechnique -= windGusts;
     flightTechnique = round(flightTechnique);
     if (flightTechnique > 280)
         flightTechnique = 280;
@@ -116,6 +120,14 @@ void Jumper::setGateAndWindMeters()
         hill.windMetersFront = (hill.windMetersFront / hill.metersPoints);
     }
 }
+
+void Jumper::setOtherComponents()
+{
+    trackRain = comp.trackRain + normalRandom(0, (comp.trackRain / 2));
+
+    windGusts = comp.windUnstable + normalRandom(0, (comp.windUnstable / 2));
+}
+
 void Jumper::setPoints()
 {
     if (comp.windComp == 1)
@@ -128,7 +140,14 @@ void Jumper::setPoints()
     if (comp.gateComp == 1)
         compensationGate = (comp.startGate - gate) * hill.gatePoints;
 
-    points = (hill.pointsForK + (hill.metersPoints * (distance - hill.kpoint) + judgesAll + (compensationGate + compensationWind)));
+    points = (hill.pointsForK + (hill.metersPoints * (distance - hill.kpoint)));
+    if (comp.isJudges == 1)
+        points += judgesAll;
+    if (comp.gateComp == 1)
+        points += compensationGate;
+    if (comp.windComp == 1)
+        points += compensationWind;
+
     if (points < 0)
         points = 0;
 }
@@ -153,7 +172,7 @@ void Jumper::land()
     judgeRating = (round(judgeRating) * 2) / 2;
 
     rd = randomInt(0, 1000 * 100);
-    rd1 = 76850 - (landRating * 350) - (expernice * 100);
+    rd1 = 86950 - (landRating * 550) - (expernice * 300);
     rd1 -= ((hill.maxdist - distance) * 16 * hill.hsLandDifficulty);
     if (rd1 < 0)
         rd1 = randomInt(200, 900);
@@ -168,7 +187,7 @@ void Jumper::land()
     else
     {
         rd = randomInt(1, 1000 * 100);
-        rd1 = 65210 - (landRating * 350) - (expernice * 100);
+        rd1 = 77210 - (landRating * 550) - (expernice * 300);
         rd1 -= ((hill.maxdist - distance) * 18.5 * hill.hsLandDifficulty);
         if (rd1 < 0)
             rd1 = randomInt(250, 950);
@@ -182,7 +201,7 @@ void Jumper::land()
         else
         {
             rd = randomInt(1, 1000 * 100);
-            rd1 = 103539 - (landRating * 350) - (expernice * 100);
+            rd1 = 117039 - (landRating * 550) - (expernice * 300);
             rd1 -= ((hill.maxdist - distance) * 20.7 * hill.hsLandDifficulty);
             if (rd1 < 0)
                 rd1 = randomInt(2000, 7000);
@@ -282,7 +301,7 @@ void Jumper::showResult()
     }
     if (test1 < 0)
     {
-        colorText(2, to_string(test1));
+        colorText(4, to_string(test1));
     }
     SetConsoleTextAttribute(hcon, 15);
     cout << "))" << endl;
@@ -469,6 +488,45 @@ void Competition::setLeaderPoints()
         if (jp.points > top)
             top = jp.points;
     }
+}
+
+void Jumper::saveResultsToCsvFile(string file)
+{
+    rsf.open(file, ios::out | ios::app);
+    rsf << name << ";" << surname << ";" << nationality << ";" << distance << ";" << gate << ";" << wind << ";" << compensationGate + compensationWind;
+    if (comp.isJudges == 1)
+    {
+        rsf << "|";
+        for (auto jg : judges)
+        {
+            rsf << jg << "|";
+        }
+        rsf << ";" << judgesAll;
+    }
+    rsf << ";" << points << endl;
+    rsf.close();
+}
+void Jumper::saveResultsToTxtFile(string file)
+{
+    rsf.open(file, ios::out | ios::app);
+    rsf << name << " " << surname << " (" << nationality << ") , " << distance << "m, Belka " << gate << ", Wiatr: " << wind << ", Rekompensata: " << compensationGate + compensationWind;
+    if (comp.isJudges == 1)
+    {
+        rsf << ", Noty: |";
+        for (auto jg : judges)
+        {
+            rsf << jg << "|";
+        }
+        rsf << ", ¥cznie: " << judgesAll;
+    }
+    rsf << ", Punkty: " << points << "pts" << endl;
+    rsf.close();
+}
+void defaultClearFile(string file)
+{
+    rsf.open(file, ios::out);
+    rsf.clear();
+    rsf.close();
 }
 
 void Hill::startup()
@@ -673,40 +731,66 @@ void loadHills()
     hlf.close();
 }
 
-void loadJumpers(bool ifForm)
+void loadJumpers(bool ifAge, bool ifForm, bool ifInjuryResistance)
 {
     Jumper jp;
     string tmp;
     jpf.open("../resources/jumpers.csv", ios::in);
     while (getline(jpf, jp.name, ','))
     {
+        //cout << jp.name << endl;
         getline(jpf, jp.surname, ',');
+        //cout << jp.surname << endl;
         getline(jpf, jp.nationality, ',');
-        getline(jpf, tmp, ',');
-        jp.age = stoi(tmp);
+        //cout << jp.nationality << endl;
+        if (ifAge == true)
+        {
+            getline(jpf, tmp, ',');
+            jp.age = stoi(tmp);
+            //cout << jp.age << endl;
+        }
         getline(jpf, tmp, ',');
         jp.height = stoi(tmp);
+        //cout << jp.height << endl;
         getline(jpf, tmp, ',');
         jp.takeoffPowerS = stoi(tmp);
+        //cout << jp.takeoffPowerS << endl;
         getline(jpf, tmp, ',');
+        //cout << tmp << endl;
         jp.takeoffTechniqueS = stoi(tmp);
         getline(jpf, tmp, ',');
         jp.flightTechniqueS = stoi(tmp);
+        //cout << jp.flightTechniqueS << endl;
         getline(jpf, tmp, ',');
         jp.flightStyle = stoi(tmp);
+        //cout << jp.flightStyle << endl;
         getline(jpf, tmp, ',');
         jp.landSkillS = stoi(tmp);
+        //cout << jp.landSkillS << endl;
         getline(jpf, tmp, ',');
         jp.landStyleS = stoi(tmp);
-        getline(jpf, tmp, ',');
+        //cout << jp.landStyleS << endl;
+        if (ifForm == 0)
+            getline(jpf, tmp);
+        else
+            getline(jpf, tmp, ',');
         jp.expernice = stoi(tmp);
+        //cout << jp.expernice << endl;
         if (ifForm == true)
         {
-            getline(jpf, tmp, ',');
+            if (ifInjuryResistance == 0)
+                getline(jpf, tmp);
+            else
+                getline(jpf, tmp, ',');
             jp.form = stoi(tmp);
+            //cout << jp.form << endl;
         }
-        getline(jpf, tmp);
-        jp.injuryResistance = stoi(tmp);
+        if (ifInjuryResistance == true)
+        {
+            getline(jpf, tmp);
+            jp.injuryResistance = stoi(tmp);
+            //cout << jp.injuryResistance << endl;
+        }
         jumpersList.push_back(jp);
     }
     jpf.close();
@@ -733,8 +817,12 @@ void loadTrainingConfig()
     comp.gateComp = stoi(tmp);
     getline(tcf, tmp, ',');
     comp.windComp = stoi(tmp);
-    getline(tcf, tmp);
+    getline(tcf, tmp, ',');
     comp.isJudges = stoi(tmp);
+    getline(tcf, tmp, ',');
+    comp.windUnstable = stoi(tmp);
+    getline(tcf, tmp);
+    comp.trackRain = stoi(tmp);
     tcf.close();
 }
 
@@ -759,7 +847,9 @@ void showHillInfo(Hill hl)
     cout << hl.name << " (" << hl.country << ") K" << hl.kpoint << " HS" << hl.hspoint << " (" << percent(95, hl.hspoint) << ") " << endl;
     cout << "Punkty za belke: " << hl.gatePoints << endl;
     cout << "Punkty za wiatr przedni: " << hl.windPointsFront << endl;
-    cout << "Punkty za wiatr tylni: " << hl.windPointsBack << endl;
+    cout << "Punkty za wiatr tylni: " << hl.windPointsBack << endl
+         << "Punkty za punkt K: " << hl.pointsForK << endl
+         << "Punkty za metr: " << hl.metersPoints << endl;
 }
 
 void showJumpers()

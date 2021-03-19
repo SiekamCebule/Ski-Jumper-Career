@@ -1,0 +1,34 @@
+Fatih Arda Ipcoglu (Turcja) , 107.5m, Belka 17, Wiatr: -0.152247, Rekompensata: 0.962666, Punkty: 38.4627pts
+Sergey Kravtsov (Kazachstan) , 95m, Belka 17, Wiatr: -0.119168, Rekompensata: 5.49971, Punkty: 20.4997pts
+Sabirzhan Muminov (Kazachstan) , 108m, Belka 17, Wiatr: -0.00914792, Rekompensata: 4.80303, Punkty: 43.203pts
+Jonathan Learoyd (Francja) , 118.5m, Belka 17, Wiatr: -0.286185, Rekompensata: 3.37613, Punkty: 60.6761pts
+Muhammet Irfan Cintimar (Turcja) , 112.5m, Belka 17, Wiatr: -0.00658498, Rekompensata: -0.887883, Punkty: 45.6121pts
+Valentin Foubert (Francja) , 122m, Belka 17, Wiatr: -0.206401, Rekompensata: 4.15216, Punkty: 67.7522pts
+Giovanni Bresadola (Wˆochy) , 115.5m, Belka 17, Wiatr: -0.261281, Rekompensata: 5.07192, Punkty: 56.9719pts
+Andrew Urlaub (Stany Zjednoczone) , 109m, Belka 17, Wiatr: -0.0653874, Rekompensata: -0.588044, Punkty: 39.612pts
+Decker Dean (Stany Zjednoczone) , 109m, Belka 17, Wiatr: -0.0651488, Rekompensata: 0.0321541, Punkty: 40.2322pts
+Vitaliy Kalinichenko (Ukraina) , 120m, Belka 17, Wiatr: -0.0591824, Rekompensata: 1.21261, Punkty: 61.2126pts
+Nicolae Sorin  Mitrofan (Rumunia) , 120m, Belka 17, Wiatr: -0.0699115, Rekompensata: -1.20666, Punkty: 58.7933pts
+Danil Vassilyev (Kazachstan) , 109m, Belka 17, Wiatr: -0.314647, Rekompensata: 5.9713, Punkty: 46.1713pts
+Alessandro Batby (Francja) , 116m, Belka 17, Wiatr: -0.00851497, Rekompensata: -1.42401, Punkty: 51.376pts
+Vojetch Stursa (Czechy) , 130m, Belka 17, Wiatr: -0.327617, Rekompensata: 5.79438, Punkty: 83.7944pts
+Andrei Feldorean (Rumunia) , 126m, Belka 17, Wiatr: -0.175262, Rekompensata: 3.85039, Punkty: 74.6504pts
+Daniel Andrei Cacina (Rumunia) , 120.5m, Belka 17, Wiatr: -0.0716236, Rekompensata: 1.11832, Punkty: 62.0183pts
+Matthew Soukup (Kanada) , 114.5m, Belka 17, Wiatr: -0.157809, Rekompensata: 0.0203301, Punkty: 50.1203pts
+Thomas Aasen Markeng (Norwegia) , 135.5m, Belka 17, Wiatr: -0.00414655, Rekompensata: -0.83013, Punkty: 87.0699pts
+Kevin Bickner (Stany Zjednoczone) , 108.5m, Belka 15, Wiatr: -0.0749751, Rekompensata: 10.0702, Punkty: 49.3702pts
+Vladimir Zografski (Buˆgaria) , 125.5m, Belka 15, Wiatr: -0.000660115, Rekompensata: 14.26, Punkty: 84.16pts
+Matthis Contamine (Francja) , 106m, Belka 15, Wiatr: -0.312499, Rekompensata: 11.5176, Punkty: 46.3176pts
+Cestmir Kozisek (Czechy) , 100m, Belka 15, Wiatr: -0.183791, Rekompensata: 10.9096, Punkty: 34.9096pts
+Niko Kytosaho (Finlandia) , 117.5m, Belka 15, Wiatr: -0.23946, Rekompensata: 11.015, Punkty: 66.515pts
+Sergey Tkachenko (Kazachstan) , 96.5m, Belka 15, Wiatr: -0.0780361, Rekompensata: 13.6471, Punkty: 31.3471pts
+Andreas Schuler (Szwajcaria) , 118m, Belka 15, Wiatr: -0.193234, Rekompensata: 12.2067, Punkty: 68.6067pts
+Jarkko Maatta (Finlandia) , 116.5m, Belka 15, Wiatr: -0.280945, Rekompensata: 14.7852, Punkty: 68.4852pts
+Ilya Mankov (Rosja) , 115m, Belka 15, Wiatr: -0.149767, Rekompensata: 10.5972, Punkty: 61.5972pts
+Danil Sadreev (Rosja) , 116m, Belka 15, Wiatr: -0.253894, Rekompensata: 15.5496, Punkty: 68.3496pts
+Shohei Tochimoto (Japonia) , 116m, Belka 15, Wiatr: -0.031623, Rekompensata: 12.5298, Punkty: 65.3298pts
+Viktor Polasek (Czechy) , 112.5m, Belka 15, Wiatr: -0.154976, Rekompensata: 11.6056, Punkty: 58.1056pts
+Manuel Fettner (Austria) , 88m, Belka 5, Wiatr: -0.258054, Rekompensata: 69.9302, Punkty: 72.3302pts
+Jakub Wolny (Polska) , 105m, Belka 5, Wiatr: -0.324463, Rekompensata: 73.3314, Punkty: 106.331pts
+Simon Ammann (Szwajcaria) , 82m, Belka 5, Wiatr: -0.0869079, Rekompensata: 66.6044, Punkty: 58.2044pts
+Mikhail Nazarov (Rosja) , 123.5m, Belka 15, Wiatr: -0.233027, Rekompensata: 16.1108, Punkty: 82.4108pts

@@ -27,6 +27,7 @@ HANDLE hcon = GetStdHandle(STD_OUTPUT_HANDLE);
 #define jumpersfile jpf
 #define trainingconfigfile tcf
 #define nationsfile ntf
+#define resultsfile rsf
 
 class Jumper
 {
@@ -42,7 +43,7 @@ public:
     int landSkillS, landStyleS, landType;
     double landRating;
     int expernice, condition, readyToJump, form, happiness, injuryResistance;
-    int gate;
+    int gate, windGusts, trackRain;
     double distance, toBeat;
     double judges[5], minJudge, maxJudge, wind, windB, windBonus, judgeRating, judgesPoints, judgesAll;
     double points, compensationGate, compensationWind;
@@ -55,6 +56,7 @@ public:
     void setTakeoffTechnique();
     void setFlightTechnique();
     void setGateAndWindMeters();
+    void setOtherComponents();
     void setPoints();
     void land();
     void heightWindMeters();
@@ -63,6 +65,9 @@ public:
     void showDistanceAndToBeat();
     void basicDistance();
     void setToBeat();
+    void saveResultsToCsvFile(string file);
+    void saveResultsToTxtFile(string file);
+    vector<string> specials;
 };
 
 class Hill
@@ -94,6 +99,7 @@ public:
     vector<Jumper> sortJumpers;
     int startGate;
     double typicalWind[2], windChange[2], startWind, windFaulty, leaderPoints;
+    int windUnstable, trackRain;
     bool gateComp, windComp, isJudges;
     void sortResults();
     void showHideInfo();
@@ -121,7 +127,7 @@ Competition comp;
 vector<Competition> comps;
 Jumper trainingJumper;
 Save save;
-fstream hillsfile, jumpersfile, trainingconfigfile, nationsfile;
+fstream hillsfile, jumpersfile, trainingconfigfile, nationsfile, resultsfile;
 int randomInt(int, int);
 double randomDouble(double, double);
 void colorText(unsigned short color, string text);
@@ -130,12 +136,13 @@ double normalRandom(double mid, double a);
 void binomalRandom(int up, int chance);
 //-----------------------------//
 void loadHills();
-void loadJumpers(bool ifForm);
+void loadJumpers(bool ifAge, bool ifForm, bool ifInjuryResistance);
 void loadTrainingConfig();
 void selectTrainingHill();
 void selectTrainingJumper();
 void showHillInfo(Hill hl);
 void showJumpers();
+void defaultClearFile(string file);
 
 vector<Hill> hills;
 vector<Jumper> jumpersList;
